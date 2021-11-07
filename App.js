@@ -1,19 +1,22 @@
-const express = require("express");
-const app = express();
-const port = 5000;
-app.use(express.json())
+const express = require("express"); //to create express app
+const app = express(); //envo express
+const port = 5000; //set port
+app.use(express.json()) //Json data
+
 
 const toDos = [
     { name: "Sleep", isComplete: false , id: 0 },
     { name: "Eat", isComplete: false , id: 1},
     { name: "sleep Again", isComplete: false, id: 2 },
 ];
+
+//to show todos data
 app.get("/todos", (req, res) => {
     res.status(200)
     res.json(toDos)
 });
 
-//creat
+//to add new task
 app.post("/create", (req, res) => {
     const { name, isComplete ,id} = req.body;
     toDos.push({ name, isComplete , id });
@@ -24,7 +27,7 @@ app.post("/create", (req, res) => {
 
 
 //Search by name
-app.get("/search/:name", (req, res) => {
+app.get("/searchByName/:name", (req, res) => {
     const { name } = req.query;
     const found = toDos.find((elem) => {
       return elem.name === name;
@@ -38,7 +41,7 @@ app.get("/search/:name", (req, res) => {
     }
   });
   //Search by id
-app.get("/search/:id", (req, res) => {
+app.get("/searchById/:id", (req, res) => {
     const { id } = req.query;
     const found = toDos.find((elem) => {
       return elem.id === Number(id);
@@ -53,15 +56,12 @@ app.get("/search/:id", (req, res) => {
   });
 
   //delete list by id
-app.delete("/delete/:id", (req, res) => {
+app.delete("/deleteByID/:id", (req, res) => {
     const { id } = req.params;
     toDos.forEach((elem,i)=>{ 
         if(elem.id === Number(id)){
             toDos.splice(i,1)
-       } else {
-            res.status(404);
-            res.json("Task is not found");
-          }
+       }
     })
  
     res.status(200);
@@ -69,15 +69,12 @@ app.delete("/delete/:id", (req, res) => {
   });
 
   //delete list by name of task
-  app.delete("/delete/:name", (req, res) => {
+  app.delete("/deleteByName/:name", (req, res) => {
     const { name } = req.params;
     toDos.forEach((elem,i)=>{ 
         if(elem.name === name){
             toDos.splice(i,1)
-        }else {
-            res.status(404);
-            res.json("Task is not found");
-          }
+        }
     })
  
     res.status(200);
@@ -85,37 +82,30 @@ app.delete("/delete/:id", (req, res) => {
   });
 
   //Update list by id
-app.put("/update/:id/:name",(req,res)=>{
+app.put("/updateByID/:id/:name",(req,res)=>{
     const id = req.params.id;
     const name =req.params.name;
     toDos.forEach((elem)=>{
         if(elem.id === Number(id)){
             elem.name =name
-        }else {
-            res.status(404);
-            res.json("Task is not found");
-          }
+        }
     })   
     res.status(200);
     res.json(toDos);
 })
 
   //Update list by name
-  app.put("/update/:name/:newName",(req,res)=>{
+  app.put("/updateByName/:name/:newName",(req,res)=>{
     const name =req.params.name;
     const newName = req.params.newName;
     toDos.forEach((elem)=>{
-        if(elem.name === newName){
-            elem.name =name
-        }else {
-            res.status(404);
-            res.json("Task is not found");
-          }
+        if(elem.name === name){
+            elem.name =newName 
+        }
     })   
     res.status(200);
     res.json(toDos);
 })
-
 
 
 app.listen(port, () => {
