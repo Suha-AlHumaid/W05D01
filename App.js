@@ -4,9 +4,9 @@ const PORT = 5000; //set port best praktise in capital letter
 app.use(express.json()); //Json data
 
 let toDos = [
-  { name: "Sleep", isDele: false, id: 0 }, //elem.name
-  { name: "Eat", isDele: false, id: 1 }, //elem
-  { name: "sleep Again", isDele: false, id: 2 }, //elem
+  { name: "Sleep", isComplete: false, isDele: false, id: 0 }, //elem.name
+  { name: "Eat", isComplete: false, isDele: false, id: 1 }, //elem
+  { name: "sleep Again", isComplete: false, isDele: false, id: 2 }, //elem
 ];
 
 ///show todos data
@@ -28,6 +28,26 @@ app.get("/todo/", (req, res) => {
     res.status(400).json(error);
   }
 });
+
+////add new task
+app.post("/todo", (req, res) => {
+  let newId = toDos.length;
+  const { name, isComplete, isDele } = req.body;
+  toDos.push({ name, isComplete, isDele, id: newId });
+  res.status(200).json(toDos);
+});
+
+  //Update list by id
+  app.put("/update/:id", (req,res)=>{
+    const {id}= req.params
+    const {name} = req.body
+    toDos.forEach(elem =>{
+    if(elem.id == id) {
+      elem.name = name
+    }
+    })
+    res.status(200).json(toDos)
+    })
 
 ////////////////////////////////////////////////////
 app.listen(PORT, () => {
