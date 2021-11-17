@@ -38,13 +38,25 @@ app.post("/todo", (req, res) => {
 });
 
   //Update list by id
-  app.put("/update/:id", (req,res)=>{
+  app.put("/todo/:id", (req,res)=>{
     const {id}= req.params
     const {name} = req.body
     toDos.forEach(elem =>{
     if(elem.id == id) {
       elem.name = name
     }
+    })
+    res.status(200).json(toDos)
+    })
+
+      
+  //Soft delete
+  app.put("/delete/:id", (req,res)=>{
+    const {id} = req.params
+    toDos.forEach(elem=>{
+      if(elem.id == id){
+        elem.isDele = true
+      }
     })
     res.status(200).json(toDos)
     })
