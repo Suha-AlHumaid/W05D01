@@ -14,6 +14,14 @@ app.get("/todos", (req, res) => {
   res.status(200).json(toDos);
 });
 
+
+  // get task by by query
+  app.get("/todo/",(req,res)=>{
+    const {id }= req.query
+    const arr = toDos.find(elem=> elem.id == id) // elem.id === Number(id)
+    res.status(200).json(arr)
+    })
+
 ////////////////////////////////////////////////////
 app.listen(PORT, () => {
   console.log(`server is running ${PORT}`);
